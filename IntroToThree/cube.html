@@ -1,0 +1,71 @@
+<html>
+<head>
+	<title>Chinmay's First Three App</title>
+	<style>
+	canvas{width: 100%; height: 100%;}
+	</style>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/three.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">&nbsp;</div>
+		<div class="row">
+			<p class="lead">Camera Positioning : 
+			<a class="btn btn-primary" onClick="plusX()">+ X</a>
+			<a class="btn btn-primary" onClick="minusX()">- X</a> &nbsp;
+			<a class="btn btn-primary" onClick="plusY()">+ Y</a>
+			<a class="btn btn-primary" onClick="minusY()">- Y</a> &nbsp;
+			<a class="btn btn-primary" onClick="plusZ()">+ Z</a>		
+			<a class="btn btn-primary" onClick="minusZ()">- Z</a> &nbsp;&nbsp;
+			<a class="btn btn-danger" onClick="defaultPos()">Default</a>
+			</p>
+		</div>
+		<div class="row">&nbsp;</div>
+	</div>
+
+	<script>
+		var aspect = window.innerWidth/window.innerHeight;
+		/* Basic Set up */
+		//Scene
+		var scene = new THREE.Scene();
+
+		// Camera with Field of view, aspect ratio, near and far clipping distance
+		var camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
+
+		// Renderer (hoping WebGL is supported by my browser)
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+
+
+		// Creating a shape and adding it to the scene
+		// This is a cube
+		var geo = new THREE.BoxGeometry(1,1,1);
+		var material = new THREE.MeshBasicMaterial({color: 0xff0000});
+		var shape= new THREE.Mesh(geo, material);
+		scene.add(shape);
+		camera.position.z = 10;
+		camera.position.y = 0;
+		camera.position.x = 5;
+
+
+		// Light and rendering
+		function render(){
+			requestAnimationFrame(render);
+			renderer.render(scene, camera);
+		}
+		render();
+
+
+		// Camera Positioning functions
+		var plusX = function(){camera.position.x+= 0.5;};
+		var plusY = function(){camera.position.y+= 0.5;};
+		var plusZ = function(){camera.position.z+= 0.5;};
+		var minusX = function(){camera.position.x-= 0.5;};
+		var minusZ = function(){camera.position.y-= 0.5;};
+		var minusZ = function(){camera.position.z-= 0.5;};
+		var defaultPos = function(){camera.position.x=0; camera.position.y=0; camera.position.z=5;};
+	</script>
+</body>
+</html>

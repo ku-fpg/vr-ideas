@@ -1,0 +1,21 @@
+To be able to display anything with THREE, we need three things
+
+1. A scene
+	var x = new THREE.Scene();
+
+2. A camera
+	There are a few different cameras available. 
+	var y = new THREE.PerspectiveCamera (a, b, c, d)
+			a = 	Field of View i.e. the angle between the top & bottom planes of the frustum (what you see) 
+			b = 	Aspect Ratio i.e. Width/Height of the screen (not the scene, the screen where the scene is drawn)
+			c, d = 	Near and Far Clipping Planes. i.e. objects farther than d and closer than c will not be seen by the camera.
+
+3. Renderer
+	There are a few different renderes available as fallbacks for users with browsers that don't support WebGL.
+		var z = new THREE.WebGLRenderer();
+
+	Once renderer is created, set its size. (The last false will disable the resolution to get updated according to the actual size)
+		renderer.setSize(window.innerWidth, window.innerHeight, false);
+
+	Then add the renderer to HTML as the <canvas> element.
+		document.body.appendChild(renderer.domElement);
