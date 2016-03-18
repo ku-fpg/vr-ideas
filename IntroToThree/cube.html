@@ -21,10 +21,21 @@
 			<a class="btn btn-danger" onClick="defaultPos()">Default</a>
 			</p>
 		</div>
+		<div class="row">
+			<p class="lead">Rotatation : 
+			<a class="btn btn-primary" onClick="rotXplus()">+ X</a>
+			<a class="btn btn-primary" onClick="rotXminus()">- X</a> &nbsp;
+			<a class="btn btn-primary" onClick="rotYplus()">+ Y</a>
+			<a class="btn btn-primary" onClick="rotYminus()">- Y</a> &nbsp;
+			
+			<a class="btn btn-danger" onClick="toggleFlag()">Toggle Rotation</a>
+			</p>
+		</div>
 		<div class="row">&nbsp;</div>
 	</div>
 
 	<script>
+		var flag = false; 
 		var aspect = window.innerWidth/window.innerHeight;
 		/* Basic Set up */
 		//Scene
@@ -35,6 +46,8 @@
 
 		// Renderer (hoping WebGL is supported by my browser)
 		var renderer = new THREE.WebGLRenderer();
+		renderer.setClearColor( 0xf0f0f0 );
+		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild(renderer.domElement);
 
@@ -42,30 +55,56 @@
 		// Creating a shape and adding it to the scene
 		// This is a cube
 		var geo = new THREE.BoxGeometry(1,1,1);
-		var material = new THREE.MeshBasicMaterial({color: 0xff0000});
+		//var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+		//var material = new THREE.MeshDepthMaterial({morphTargets:false, wireframe:false, wireframeLinewidth:2});
+		//var material = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2 } );
+		var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+
 		var shape= new THREE.Mesh(geo, material);
-		scene.add(shape);
-		camera.position.z = 10;
+		shape.rotation.x = 0.5;
+		shape.rotation.y= 1;
+		camera.position.z = 5;
 		camera.position.y = 0;
-		camera.position.x = 5;
+		camera.position.x = 0;
 
 
-		// Light and rendering
+		// Lights
+		var ambientLight = new THREE.AmbientLight(0xff0000);
+		var directionalLight = new THREE.DirectionalLight(0xffff00 );
+		directionalLight.position.x = 10;
+		directionalLight.position.y = 10;
+		directionalLight.position.z = 10;
+		// Add the lights to the scene
+		scene.add(shape, ambientLight, directionalLight);
+
+
+		// Rendering - By default renders 60 frames per second.
 		function render(){
 			requestAnimationFrame(render);
+			if(flag){
+				shape.rotation.x += 0.05;
+				shape.rotation.y += 0.05;
+			}
 			renderer.render(scene, camera);
 		}
 		render();
-
 
 		// Camera Positioning functions
 		var plusX = function(){camera.position.x+= 0.5;};
 		var plusY = function(){camera.position.y+= 0.5;};
 		var plusZ = function(){camera.position.z+= 0.5;};
 		var minusX = function(){camera.position.x-= 0.5;};
-		var minusZ = function(){camera.position.y-= 0.5;};
+		var minusY = function(){camera.position.y-= 0.5;};
 		var minusZ = function(){camera.position.z-= 0.5;};
-		var defaultPos = function(){camera.position.x=0; camera.position.y=0; camera.position.z=5;};
+		var defaultPos = function(){camera.position.x=0; camera.position.y=0; camera.position.z=5; shape.rotation.x=0.5; shape.rotation.y=1;};
+
+		// Rotation Functions
+		var toggleFlag = function(){if(flag){flag = false;}else flag=true;};
+		var rotXplus = function(){shape.rotation.x += 0.1;};
+		var rotXminus = function(){shape.rotation.x -= 0.1;};
+		var rotYplus = function(){shape.rotation.y += 0.1;};
+		var rotYminus = function(){shape.rotation.y -= 0.1;};
+		
 	</script>
 </body>
 </html>
