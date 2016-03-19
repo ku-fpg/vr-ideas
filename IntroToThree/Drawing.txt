@@ -1,0 +1,18 @@
+For drawing we need 3 components :
+	1. Geometry
+		Contains all the vertices and faces of a 3D shape
+
+	2. Material
+		Describes the color and texture of a shape. Colors are described as hexes (same as CSS)
+
+	3. Mesh
+		Takes geometry and material and puts them together for rendering.
+
+When a Mesh is ready, it can be added to the scene with "scene.add( shape );"
+
+By default, the shape is added at the origin of the scene (0,0,0). In a fresh scene, that is where the camera is located, so
+the shape and the camera overlap and we don't see anything. So the camera has to be moved further out, so the shape is in the
+visible frustum. 
+
+	example : camera.position.z = camera.position.z - 10;
+

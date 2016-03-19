@@ -31,12 +31,27 @@
 			<a class="btn btn-danger" onClick="toggleFlag()">Toggle Rotation</a>
 			</p>
 		</div>
+		<div class="row" id="alertBox"></div>
 		<div class="row">&nbsp;</div>
+		<div class="row">
+			<div class= "col-lg-9" id="myCanvas"></div>
+			<div class="col-lg-3">
+			    <div class="input-group">
+			      <input id= "propInp" type="text" class="form-control" placeholder="Property">
+			      <input id= "valInp" type="text" class="form-control" placeholder="Value">
+				  <button class="btn btn-default" type="button" onClick="addProp()">Go!</button>
+				  <p>&nbsp;</p>
+				  <div id="logDiv"></div>
+			    </div><!-- /input-group -->
+			  </div><!-- /.col-lg-3 -->
+
+		</div>
 	</div>
+
 
 	<script>
 		var flag = false; 
-		var aspect = window.innerWidth/window.innerHeight;
+		var aspect = (window.innerWidth*3/5)/(window.innerHeight*2/3);
 		/* Basic Set up */
 		//Scene
 		var scene = new THREE.Scene();
@@ -48,8 +63,9 @@
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setClearColor( 0xf0f0f0 );
 		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		document.body.appendChild(renderer.domElement);
+		renderer.setSize(window.innerWidth*3/5, window.innerHeight*2/3);
+		//document.body.appendChild(renderer.domElement);
+		document.getElementById('myCanvas').appendChild(renderer.domElement);
 
 
 		// Creating a shape and adding it to the scene
@@ -104,6 +120,29 @@
 		var rotXminus = function(){shape.rotation.x -= 0.1;};
 		var rotYplus = function(){shape.rotation.y += 0.1;};
 		var rotYminus = function(){shape.rotation.y -= 0.1;};
+
+		//controls
+		var addProp= function(){
+			
+			if(document.getElementById('propInp').value=="AddLight"){
+				var attributes = document.getElementById('valInp').value.split(",");
+					var directionalLight = new THREE.DirectionalLight(attributes[3]);
+					directionalLight.position.x = attributes[0];
+					directionalLight.position.y = attributes[1];
+					directionalLight.position.z = attributes[2];
+					scene.add(directionalLight);
+
+					var message= "Added a DirectionalLight at ("+attributes[0]+","+attributes[1]+", "+attributes[2]+") of color "+attributes[3];
+					document.getElementById('logDiv').innerHTML+= "<p>"+message+"</p>";
+
+
+				alert(m);
+			}else{
+				var errorMsg ="Currently only AddLight is supported. For values enter x, y, z and color.<br/>E.g. <br/>Property = AddLight <br/>Value = 3,4,5,0xffff00";
+				document.getElementById('logDiv').innerHTML= "<div class='alert alert-danger'>"+errorMsg+"</div>";
+				
+			}
+		}
 		
 	</script>
 </body>
