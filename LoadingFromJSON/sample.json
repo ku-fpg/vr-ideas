@@ -1,0 +1,11 @@
+{
+	"shape" : "cuboid",
+	"length" : 4,
+	"breadth" : 5,
+	"height" : 7,
+	"x" : 0,
+	"y" : 2,
+	"z" : 0,
+	"color" : "red",
+	"material" : "shiny"
+}

@@ -1,0 +1,117 @@
+<html>
+<head>
+	<title>Chinmay's First Three App</title>
+	<style>
+	canvas{width: 100%; height: 100%;}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/three.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">&nbsp;</div>
+		<div class= "row">
+			<p class="lead">Load JSON : <a class="btn btn-success" onClick= "loadJSON()">
+			Go!</a></p>
+		</div>
+		<div class="row">
+			<p class="lead">Camera Positioning : 
+			<a class="btn btn-primary" onClick="plusX()">+ X</a>
+			<a class="btn btn-primary" onClick="minusX()">- X</a> &nbsp;
+			<a class="btn btn-primary" onClick="plusY()">+ Y</a>
+			<a class="btn btn-primary" onClick="minusY()">- Y</a> &nbsp;
+			<a class="btn btn-primary" onClick="plusZ()">+ Z</a>		
+			<a class="btn btn-primary" onClick="minusZ()">- Z</a> &nbsp;&nbsp;
+			<a class="btn btn-danger" onClick="defaultPos()">Default</a>
+			</p>
+		</div>
+		<div class="row">
+			<p class="lead">Rotatation : 
+			<a class="btn btn-primary" onClick="rotXplus()">+ X</a>
+			<a class="btn btn-primary" onClick="rotXminus()">- X</a> &nbsp;
+			<a class="btn btn-primary" onClick="rotYplus()">+ Y</a>
+			<a class="btn btn-primary" onClick="rotYminus()">- Y</a> &nbsp;
+			
+			<a class="btn btn-danger" onClick="toggleFlag()">Toggle Rotation</a>
+			</p>
+		</div>
+		<div class="row" id="alertBox"></div>
+	</div>
+	<script>
+		var flag = false; 
+		var aspect = (window.innerWidth*3/5)/(window.innerHeight*2/3);
+		var obj;
+		var scene;
+		var camera;
+		var renderer;
+		
+		/*
+
+		camera.position.y = 0;
+		camera.position.x = 0;
+
+		var ambientLight = new THREE.AmbientLight(0xff0000);
+		var directionalLight = new THREE.DirectionalLight(0xffff00 );
+		directionalLight.position.x = 10;
+		directionalLight.position.y = 10;
+		directionalLight.position.z = 10;
+
+		// Camera Positioning functions
+		var plusX = function(){camera.position.x+= 0.5;};
+		var plusY = function(){camera.position.y+= 0.5;};
+		var plusZ = function(){camera.position.z+= 0.5;};
+		var minusX = function(){camera.position.x-= 0.5;};
+		var minusY = function(){camera.position.y-= 0.5;};
+		var minusZ = function(){camera.position.z-= 0.5;};
+		var defaultPos = function(){camera.position.x=0; camera.position.y=0; camera.position.z=5; shape.rotation.x=0.5; shape.rotation.y=1;};
+
+		// Rotation Functions
+		var toggleFlag = function(){if(flag){flag = false;}else flag=true;};
+		var rotXplus = function(){shape.rotation.x += 0.1;};
+		var rotXminus = function(){shape.rotation.x -= 0.1;};
+		var rotYplus = function(){shape.rotation.y += 0.1;};
+		var rotYminus = function(){shape.rotation.y -= 0.1;};
+*/
+		//JSON STUFF
+		var loadJSON= function(){
+			
+			$.get('sample.json', function(d){ obj = d;})
+        	setTimeout(constructScene, 500);	
+
+		}
+
+		var constructScene = function(){
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
+			renderer = new THREE.WebGLRenderer();
+			renderer.setClearColor( 0xf0f0f0 );
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+			camera.position.z = 5;
+			
+			if(obj.shape == "cuboid"){
+				drawCube(obj.length, obj.breadth, obj.height, obj.x, obj.y, obj.z, obj.color, obj.material);
+			}
+		};
+
+		var drawCube= function(len, brd, ht, x, y, z, col, mat){
+			var geo = new THREE.BoxGeometry(parseInt(len), parseInt(brd), parseInt(ht));
+			var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+			var shape= new THREE.Mesh(geo, material);
+			scene.add(shape);
+			render();
+
+		}
+
+		function render(){
+			requestAnimationFrame(render);
+			if(flag){
+				shape.rotation.x += 0.05;
+				shape.rotation.y += 0.05;
+			}
+			renderer.render(scene, camera);
+		}
+	</script>
+</body>
+</html>
